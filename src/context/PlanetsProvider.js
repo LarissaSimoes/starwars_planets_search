@@ -7,7 +7,6 @@ function PlanetsProvider({ children }) {
   const [planets, setPlanets] = useState([]);
   // const [errors, setErrors] = useState(null);
 
-  // Alterações
   const fetchPlanets = async () => {
     const data = await fetch('https://swapi.dev/api/planets');
     const json = await data.json();

@@ -1,9 +1,15 @@
 import React, { useContext } from 'react';
 import PlanetsContext from '../context/PlanetsContext';
+import FiltersContext from '../context/FiltersContext';
 
 function Table() {
   const { planets } = useContext(PlanetsContext);
+  const { searchInput } = useContext(FiltersContext);
   console.log(planets);
+
+  const newArray = planets.filter((planet) => planet
+    .name.toLowerCase().includes(searchInput.toLowerCase()));
+
   return (
     <table>
       <thead>
@@ -24,7 +30,7 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        {planets.map((planet) => (
+        {newArray.map((planet) => (
           <tr key={ planet.name }>
             <td>{ planet.name }</td>
             <td>{ planet.rotation_period }</td>
