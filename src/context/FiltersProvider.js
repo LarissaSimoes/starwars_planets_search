@@ -4,27 +4,33 @@ import FiltersContext from './FiltersContext';
 
 function FiltersProvider({ children }) {
   const [searchInput, setSearchInput] = useState('');
-  const [selectInput, setSelectInput] = useState('');
-  const [sortInput, setSortInput] = useState('');
+  const [selectInput, setSelectInput] = useState([]);
+  const [filterList, setFilterList] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
 
-  const value = {
+  const values = {
     searchInput,
     setSearchInput,
     selectInput,
     setSelectInput,
-    sortInput,
-    setSortInput,
+    filterList,
+    setFilterList,
   };
 
   return (
-    <FiltersContext.Provider value={ value }>
-      {children}
+    <FiltersContext.Provider value={ values }>
+      { children }
     </FiltersContext.Provider>
   );
 }
 
 FiltersProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.element.isRequired,
 };
 
 export default FiltersProvider;

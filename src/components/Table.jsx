@@ -3,12 +3,8 @@ import PlanetsContext from '../context/PlanetsContext';
 import FiltersContext from '../context/FiltersContext';
 
 function Table() {
-  const { planets } = useContext(PlanetsContext);
   const { searchInput } = useContext(FiltersContext);
-  console.log(planets);
-
-  const newArray = planets.filter((planet) => planet
-    .name.toLowerCase().includes(searchInput.toLowerCase()));
+  const { filteredData } = useContext(PlanetsContext);
 
   return (
     <table>
@@ -30,23 +26,26 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        {newArray.map((planet) => (
-          <tr key={ planet.name }>
-            <td>{ planet.name }</td>
-            <td>{ planet.rotation_period }</td>
-            <td>{ planet.orbital_period }</td>
-            <td>{ planet.diameter }</td>
-            <td>{ planet.climate }</td>
-            <td>{ planet.gravity }</td>
-            <td>{ planet.terrain }</td>
-            <td>{ planet.surface_water }</td>
-            <td>{ planet.population }</td>
-            <td>{ planet.films }</td>
-            <td>{ planet.created }</td>
-            <td>{ planet.edited }</td>
-            <td>{ planet.url }</td>
-          </tr>
-        ))}
+        { filteredData
+          .filter((planet) => planet.name.toLowerCase()
+            .includes(searchInput.toLowerCase()))
+          .map((planet, index) => (
+            <tr key={ index }>
+              <td>{ planet.name }</td>
+              <td>{ planet.rotation_period }</td>
+              <td>{ planet.orbital_period }</td>
+              <td>{ planet.diameter }</td>
+              <td>{ planet.climate }</td>
+              <td>{ planet.gravity }</td>
+              <td>{ planet.terrain }</td>
+              <td>{ planet.surface_water }</td>
+              <td>{ planet.population }</td>
+              <td>{ planet.films }</td>
+              <td>{ planet.created }</td>
+              <td>{ planet.edited }</td>
+              <td>{ planet.url }</td>
+            </tr>
+          ))}
       </tbody>
     </table>
   );

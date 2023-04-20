@@ -1,30 +1,45 @@
-import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import useFetch from '../hooks/useFetch';
+import FiltersContext from './FiltersContext';
 import PlanetsContext from './PlanetsContext';
 
 function PlanetsProvider({ children }) {
-  // const [isLoading, setIsLoading] = useState(false);
-  const [planets, setPlanets] = useState([]);
-  // const [errors, setErrors] = useState(null);
-
-  const fetchPlanets = async () => {
-    const data = await fetch('https://swapi.dev/api/planets');
-    const json = await data.json();
-    const planetResults = json.results.map((planet) => {
-      const newPlanets = { ...planet };
-      delete newPlanets.residents;
-      return newPlanets;
-    });
-    setPlanets(planetResults);
-  };
+  const [data, setData, fetchData] = useFetch([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const { selectInput } = useContext(FiltersContext);
 
   useEffect(() => {
-    fetchPlanets();
+    fetchData('https://swapi.dev/api/planets');
   }, []);
 
+  useEffect(() => {
+    let planets = data;
+    selectInput.forEach((filter) => {
+      const { column, comparison, value } = filter;
+      switch (comparison) {
+      case 'maior que':
+        planets = (planets.filter((planet) => Number(planet[column]) > Number(value)));
+        break;
+      case 'menor que':
+        planets = (planets.filter((planet) => Number(planet[column]) < Number(value)));
+        break;
+      case 'igual a':
+        planets = (planets.filter((planet) => Number(planet[column]) === Number(value)));
+        break;
+      default:
+        planets.push(data);
+      }
+    });
+    setFilteredData(planets);
+  }, [data, selectInput]);
+
   const values = useMemo(() => ({
-    planets,
-  }), [planets]);
+    data,
+    setData,
+    filteredData,
+    setFilteredData,
+  }), [data, filteredData]);
 
   return (
     <PlanetsContext.Provider value={ values }>
@@ -34,7 +49,7 @@ function PlanetsProvider({ children }) {
 }
 
 PlanetsProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.element.isRequired,
 };
 
 export default PlanetsProvider;
