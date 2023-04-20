@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import App from '../App';
@@ -300,20 +300,39 @@ describe('Testando aplicação Star Wars', () => {
     userEvent.type(screen.getByTestId('value-filter'), '10');
     userEvent.click(screen.getByRole('button', { name: /Filtrar/i }));
     userEvent.click(screen.getByText(/excluir/i));
-     })
-     it('Testando diferentes filtros', async () => {
-      userEvent.selectOptions(screen.getByTestId('column-filter'), 'surface_water');
-      userEvent.selectOptions(screen.getByTestId('comparison-filter'), 'igual a');
-      userEvent.type(screen.getByTestId('value-filter'), '15');
+    })
+  it('Testando diferentes filtros', async () => {
+    userEvent.selectOptions(screen.getByTestId('column-filter'), 'surface_water');
+    userEvent.selectOptions(screen.getByTestId('comparison-filter'), 'igual a');
+    userEvent.type(screen.getByTestId('value-filter'), '15');
+    userEvent.click(screen.getByRole('button', { name: /Filtrar/i }));
+    userEvent.click(screen.getByText(/excluir/i));
+    })
+    it('Testando diferentes filtros', async () => {
+      userEvent.selectOptions(screen.getByTestId('column-filter'), 'rotation_period');
+      userEvent.selectOptions(screen.getByTestId('comparison-filter'), 'maior que');
+      userEvent.type(screen.getByTestId('value-filter'), '10');
       userEvent.click(screen.getByRole('button', { name: /Filtrar/i }));
+      expect(screen.getByText('Kamino')).toBeInTheDocument();
       userEvent.click(screen.getByText(/excluir/i));
-       })
-       it('Testando diferentes filtros', async () => {
-        userEvent.selectOptions(screen.getByTestId('column-filter'), 'surface_water');
-        userEvent.selectOptions(screen.getByTestId('comparison-filter'), 'igual a');
-        userEvent.type(screen.getByTestId('value-filter'), '15');
-        userEvent.click(screen.getByRole('button', { name: /Filtrar/i }));
-        userEvent.click(screen.getByText(/remover filtros/i));
-         })
+      })
+  it('Testando diferentes filtros', async () => {
+    userEvent.selectOptions(screen.getByTestId('column-filter'), 'surface_water');
+    userEvent.selectOptions(screen.getByTestId('comparison-filter'), 'igual a');
+    userEvent.type(screen.getByTestId('value-filter'), '15');
+    userEvent.click(screen.getByRole('button', { name: /Filtrar/i }));
+    userEvent.click(screen.getByText(/remover filtros/i));
+    })
+    it('Testando o botão de remover todos os filtros', () => {
+      const columns = ['population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
+      columns.forEach((column) => {
+        expect(screen.getByTestId('column-filter')).toHaveValue(column);
+        fireEvent.click(screen.getByTestId('button-filter'));
+      });
+      fireEvent.click(screen.getByTestId('button-filter'));
+      fireEvent.click(screen.getByText('Remover filtros'));
+      expect(screen.getByText('Hoth')).toBeInTheDocument();
+    })
+    
   })
 
