@@ -119,7 +119,7 @@ function Filters() {
                 data-testid="remove-filter-btn"
                 onClick={ () => handleDelete(filter.column) }
               >
-                Remover
+                Excluir
               </button>
             </div>
           ))

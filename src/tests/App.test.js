@@ -291,8 +291,8 @@ describe('Testando aplicação Star Wars', () => {
     userEvent.type((inputNumber), '1000000');
     userEvent.click(screen.getByTestId('button-filter'));
     expect(screen.getByText(/naboo/i)).toBeInTheDocument();
-    // const aldeeran = screen.getByText(/aldeeran/i);
-    // expect(aldeeran).toBeInTheDocument();
+    userEvent.click(screen.getByText(/excluir/i));
+    expect(columnFilter).not.toBeNull();
   })
   })
 
