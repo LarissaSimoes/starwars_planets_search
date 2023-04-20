@@ -294,5 +294,26 @@ describe('Testando aplicação Star Wars', () => {
     userEvent.click(screen.getByText(/excluir/i));
     expect(columnFilter).not.toBeNull();
   })
+  it('Testando diferentes filtros', async () => {
+    userEvent.selectOptions(screen.getByTestId('column-filter'), 'orbital_period');
+    userEvent.selectOptions(screen.getByTestId('comparison-filter'), 'menor que');
+    userEvent.type(screen.getByTestId('value-filter'), '10');
+    userEvent.click(screen.getByRole('button', { name: /Filtrar/i }));
+    userEvent.click(screen.getByText(/excluir/i));
+     })
+     it('Testando diferentes filtros', async () => {
+      userEvent.selectOptions(screen.getByTestId('column-filter'), 'surface_water');
+      userEvent.selectOptions(screen.getByTestId('comparison-filter'), 'igual a');
+      userEvent.type(screen.getByTestId('value-filter'), '15');
+      userEvent.click(screen.getByRole('button', { name: /Filtrar/i }));
+      userEvent.click(screen.getByText(/excluir/i));
+       })
+       it('Testando diferentes filtros', async () => {
+        userEvent.selectOptions(screen.getByTestId('column-filter'), 'surface_water');
+        userEvent.selectOptions(screen.getByTestId('comparison-filter'), 'igual a');
+        userEvent.type(screen.getByTestId('value-filter'), '15');
+        userEvent.click(screen.getByRole('button', { name: /Filtrar/i }));
+        userEvent.click(screen.getByText(/remover filtros/i));
+         })
   })
 
